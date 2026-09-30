@@ -1,20 +1,18 @@
-# Diretrizes de Contribuição - Cadastro de Pessoas
+# Contribuindo
 
-Este projeto adota padrões explícitos para garantir a qualidade de produto e manutenibilidade do código.
+## Antes de enviar uma alteração
+1. Execute o programa: python src/main.py
+2. Confira as mudanças: git status e git diff
+3. Execute as análises: pylint src e radon cc src -s
+4. Faça um commit com uma mensagem objetiva.
 
-## 1. Convenções de Código
-* Seguir as recomendações gerais da PEP 8 para a linguagem Python.
-* Todas as funções devem conter `docstrings` explicativas em formato de string tripla.
-* Variáveis e funções devem utilizar nomenclatura em padrão `snake_case`.
+## Convenções
+- Um commit representa uma alteração verificável.
+- Não inclua dados reais de pessoas no repositório.
+- Registre decisões e resultados relevantes no histórico Git.
 
-## 2. Utilização do PyLint
-* Antes de submeter qualquer alteração, execute a análise estática localmente:
-  ```bash
-  python -m pylint cadastro.py
-  ```
-* O código deve buscar aderência às regras configuradas no arquivo `.pylintrc`.
-
-## 3. Organização de Commits
-* Adotamos o padrão de commits semânticos simplificado:
-  * `chore:` para alterações de configuração, ferramentas ou arquivos de documentação.
-  * `refactor:` para alterações no código que melhoram sua estrutura sem alterar o comportamento externo.
+## Antes de iniciar
+Certifique-se de que está trabalhando com a versão atualizada do projeto:
+git switch main
+git pull
+git status

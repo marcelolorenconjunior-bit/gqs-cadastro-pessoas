@@ -11,6 +11,8 @@ disable=
 
 [BASIC]
 good-names=i,j,k,ex,Run,op,n,e,idx,qtd
+method-naming-style=camelCase
+
 
 [REPORTS]
 output-format=text

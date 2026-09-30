@@ -1,128 +1,9 @@
-"""
-Módulo de Gestão de Cadastro de Pessoas.
-COM1024 - Gestão da Qualidade de Software - UTFPR Medianeira.
-"""
-import re
+"""Programa para cadastro de pessoas. Uso didático na disciplina de GQS."""
 
-# Listas paralelas dinâmicas globais
-NOMES = []
-IDADES = []
-EMAILS = []
-
-# =================================================================
-# FUNÇÕES ESPECIALISTAS (REGRAS DE NEGÓCIO ISOLADAS)
-# =================================================================
-
-def classificar_faixa_etaria(idade):
-    """
-    Determina se a pessoa é criança, adolescente, adulto jovem, adulto ou idoso.
-    """
-    if idade < 0:
-        return "Idade inválida"
-    if idade <= 12:
-        return "Criança"
-    if idade <= 17:
-        return "Adolescente"
-    if idade <= 24:
-        return "Adulto jovem"
-    if idade <= 59:
-        return "Adulto"
-    return "Idoso"
-
-def avaliar_email(email):
-    """
-    Verifica se o e-mail está ausente, inválido ou utilizável.
-    """
-    if not email or email.strip() == "":
-        return "Ausente"
-
-    padrao = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-    if not re.match(padrao, email):
-        return "Inválido"
-
-    return "Utilizável"
-
-def identificar_provedor(email):
-    """
-    Identifica Gmail, Outlook, Hotmail, UTFPR ou outro provedor.
-    """
-    status_email = avaliar_email(email)
-    if status_email != "Utilizável":
-        return "Nenhum"
-
-    dominio = email.split("@")[-1].lower()
-
-    if "gmail.com" in dominio:
-        return "Gmail"
-    if "outlook.com" in dominio:
-        return "Outlook"
-    if "hotmail.com" in dominio:
-        return "Hotmail"
-    if "utfpr.edu.br" in dominio:
-        return "UTFPR"
-    return "Outro"
-
-def definir_condicao_contato(idade, email):
-    """
-    Determina a condição da pessoa para contato com base na idade e e-mail.
-    """
-    faixa = classificar_faixa_etaria(idade)
-    status_email = avaliar_email(email)
-
-    if faixa == "Criança":
-        return "Não contatar (Menor de idade)"
-
-    if status_email == "Ausente":
-        return "Requer atualização de cadastro (Sem e-mail)"
-    if status_email == "Inválido":
-        return "Requer correção (E-mail inválido)"
-
-    if faixa == "Adolescente":
-        return "Contatar com restrições"
-
-    return "Pronto para contato"
-
-# =================================================================
-# FUNÇÃO PRINCIPAL DE ANÁLISE (COORDENADORA)
-# =================================================================
-
-def analisar_pessoa(nomes_lista, idades_lista, emails_lista):
-    """
-    Função coordenadora. Localiza a pessoa e delega as validações.
-    """
-    nome_busca = input("Digite o nome completo para consulta: ")
-
-    try:
-        idx = nomes_lista.index(nome_busca)
-    except ValueError:
-        return None
-
-    idade = idades_lista[idx]
-    email = emails_lista[idx]
-
-    faixa_etaria = classificar_faixa_etaria(idade)
-    status_email = avaliar_email(email)
-    provedor = identificar_provedor(email)
-    condicao_contato = definir_condicao_contato(idade, email)
-
-    return {
-        "nome": nomes_lista[idx],
-        "idade": idade,
-        "email": email,
-        "faixa_etaria": faixa_etaria,
-        "status_email": status_email,
-        "provedor": provedor,
-        "condicao_contato": condicao_contato
-    }
-
-# =================================================================
-# INTERFACE DO USUÁRIO E MENU
-# =================================================================
+from src.cadastro import CadastroPessoas
 
 def exibir_menu():
-    """
-    Exibe as opções do sistema na tela e captura a opção escolhida.
-    """
+    """Exibe o menu principal."""
     print("\n=========================")
     print("   CADASTRO DE PESSOAS")
     print("=========================")
@@ -130,67 +11,126 @@ def exibir_menu():
     print("2 - Consultar pessoa")
     print("3 - Alterar pessoa")
     print("4 - Listar pessoas")
-    print("5 - Sair")
+    print("5 - Avaliar cadastro")
+    print("6 - Sair")
     return int(input("Escolha uma opcao: "))
 
-def main():
-    """
-    Fluxo principal do menu da aplicação.
-    """
+def cadastrar_pessoa(cadastro):
+    """Cadastra uma nova pessoa."""
+    nome = input("Informe o nome: ")
+    idade = int(input("Informe a idade: "))
+    email = input("Informe o email: ")
+    
+    cadastro.cadastrar(nome, idade, email)
+    
+    if idade >= 18:
+        print("Situacao: Maior de idade")
+    else:
+        print("Situacao: Menor de idade")
+
+def exibir_pessoa(pessoa):
+    """Exibe os dados de uma pessoa."""
+    print(f"Nome: {pessoa.getNome()}")
+    print(f"Idade: {pessoa.getIdade()}")
+    print(f"E-mail: {pessoa.getEmail()}")
+    if pessoa.getIdade() >= 18:
+        print("Situacao: Maior de idade")
+    else:
+        print("Situacao: Menor de idade")
+
+def consultar_pessoa(cadastro):
+    """Consulta uma pessoa pelo nome."""
+    procurado = input("Nome para consultar: ")
+    pessoa = cadastro.buscarPorNome(procurado)
+    
+    if pessoa is None:
+        print("Nome nao encontrado")
+    else:
+        exibir_pessoa(pessoa)
+
+def alterar_pessoa(cadastro):
+    """Altera os dados de uma pessoa."""
+    procurado = input("Nome para alterar: ")
+    pessoa = cadastro.buscarPorNome(procurado)
+    
+    if pessoa is None:
+        print("Nome nao encontrado")
+    else:
+        novo_nome = input("Input('Novo nome: ")
+        nova_idade = int(input("Input('Nova idade: "))
+        novo_email = input("Input('Novo e-mail: ")
+        cadastro.alterar(procurado, novo_nome, nova_idade, novo_email)
+        print("Pessoa alterada!")
+
+def listar_pessoas(cadastro):
+    """Lista todas as pessoas cadastradas."""
+    pessoas = cadastro.listar()
+    
+    if len(pessoas) == 0:
+        print("Nenhuma pessoa cadastrada")
+        return
+        
+    for pessoa in pessoas:
+        exibir_pessoa(pessoa)
+        print("-------------------------")
+        
+    print(f"Total: {len(pessoas)}")
+
+def analisar_faixa_etaria(idade):
+    """Analisa a faixa etaria."""
+    if idade < 12:
+        print("Faixa etaria: crianca")
+    elif idade < 18:
+        print("Faixa etaria: adolescente")
+    elif idade < 60:
+        print("Faixa etaria: adulto")
+    else:
+        print("Faixa etaria: idoso")
+
+def analisar_contato(idade, email):
+    """Analisa as informacoes de contato."""
+    if idade >= 18 and "@" in email:
+        print("Contato: completo")
+    elif idade >= 18:
+        print("Contato: e-mail invalido")
+    else:
+        print("Contato: menor de idade")
+
+def analisar_pessoa(cadastro):
+    """Analisa os dados de uma pessoa."""
+    procurado = input("Nome para analisar: ")
+    pessoa = cadastro.buscarPorNome(procurado)
+    
+    if pessoa is None:
+        print("Pessoa nao encontrada")
+    else:
+        analisar_faixa_etaria(pessoa.getIdade())
+        analisar_contato(pessoa.getIdade(), p=pessoa.getEmail())
+
+def executar():
+    """Executa o menu principal da aplicacao."""
+    cadastro = CadastroPessoas()
     op = 0
-    while op != 5:
+    
+    while op != 6:
         op = exibir_menu()
-
+        
         if op == 1:
-            n = input("Nome: ")
-            i = int(input("Idade: "))
-            e = input("E-mail: ")
-
-            NOMES.append(n)
-            IDADES.append(i)
-            EMAILS.append(e)
-
-            print("\nPessoa cadastrada!")
-            print("Nome: " + n)
-            print("Idade: " + str(i))
-            print("E-mail: " + e)
-            if i >= 18:
-                print("Situacao: Maior de idade")
-            else:
-                print("Situacao: Menor de idade")
-
+            cadastrar_pessoa(cadastro)
         elif op == 2:
-            resultado = analisar_pessoa(NOMES, IDADES, EMAILS)
-
-            if resultado is None:
-                print("\nPessoa não encontrada no cadastro.")
-            else:
-                print("\n--- RESULTADO DA ANÁLISE ---")
-                print(f"Nome: {resultado['nome']}")
-                print(f"Idade: {resultado['idade']} anos ({resultado['faixa_etaria']})")
-                print(f"E-mail: {resultado['email']} ({resultado['status_email']})")
-                print(f"Provedor Identificado: {resultado['provedor']}")
-                print(f"Condição de Contato: {resultado['condicao_contato']}")
-                print("----------------------------")
-
+            consultar_pessoa(cadastro)
+        elif op == 3:
+            alterar_pessoa(cadastro)
         elif op == 4:
-            qtd = len(NOMES)
-            if qtd == 0:
-                print("\nNenhuma pessoa cadastrada")
-            else:
-                print("\n--- LISTAGEM ---")
-                for idx in range(qtd):
-                    print("Nome: " + NOMES[idx])
-                    print("Idade: " + str(IDADES[idx]))
-                    print("E-mail: " + EMAILS[idx])
-                    print("-------------------------")
-                print("Total: " + str(qtd))
-
+            listar_pessoas(cadastro)
         elif op == 5:
+            analisar_pessoa(cadastro)
+        elif op == 6:
             print("Saindo...")
-        elif op != 3:
+        else:
             print("Opcao invalida")
+            
+    print("Fim do programa")
 
 if __name__ == "__main__":
-    main()
-    
+    executar()

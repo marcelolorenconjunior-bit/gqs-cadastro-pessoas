@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 driver = webdriver.Chrome()
 try:
-    driver.get("https://herokuapp.com")
+    driver.get("https://the-internet.herokuapp.com")
     wait = WebDriverWait(driver, 10)
     
     usuario = wait.until(EC.visibility_of_element_located((By.ID, "username")))

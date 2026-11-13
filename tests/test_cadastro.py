@@ -1,4 +1,4 @@
-﻿"""Testes automatizados para o Cadastro de Pessoas."""
+"""Testes automatizados para o Cadastro de Pessoas."""
 from cadastro import CadastroPessoas
 
 

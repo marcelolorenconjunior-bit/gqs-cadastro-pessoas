@@ -1,4 +1,4 @@
-﻿"""Modulo de regras de negocio do Cadastro de Pessoas."""
+"""Modulo de regras de negocio do Cadastro de Pessoas."""
 from typing import List, Optional
 from pessoa import Pessoa
 from repositorio_pessoas import RepositorioPessoas

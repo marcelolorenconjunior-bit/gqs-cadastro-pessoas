@@ -1,4 +1,4 @@
-﻿"""Contrato de persistencia para o Cadastro de Pessoas."""
+"""Contrato de persistencia para o Cadastro de Pessoas."""
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from pessoa import Pessoa

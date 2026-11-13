@@ -1,4 +1,4 @@
-﻿"""Implementacao MySQL do repositorio de pessoas."""
+"""Implementacao MySQL do repositorio de pessoas."""
 import os
 from typing import List, Optional
 import mysql.connector

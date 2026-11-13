@@ -1,4 +1,4 @@
-﻿"""Implementacao em memoria do repositorio de pessoas."""
+"""Implementacao em memoria do repositorio de pessoas."""
 from typing import List, Optional
 from pessoa import Pessoa
 from repositorio_pessoas import RepositorioPessoas

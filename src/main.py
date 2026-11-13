@@ -1,4 +1,4 @@
-﻿"""Programa principal para cadastro de pessoas. Uso didatico na disciplina de GQS."""
+"""Programa principal para cadastro de pessoas. Uso didatico na disciplina de GQS."""
 import os
 from cadastro import CadastroPessoas
 from repositorio_pessoas import RepositorioPessoas

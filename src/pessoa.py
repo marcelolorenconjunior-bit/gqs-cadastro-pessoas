@@ -1,4 +1,4 @@
-﻿"""MÃ³dulo contendo a classe Pessoa."""
+"""MÃ³dulo contendo a classe Pessoa."""
 
 class Pessoa:
     """Classe que representa uma pessoa com estado privado."""

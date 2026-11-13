@@ -1,0 +1,38 @@
+﻿services:
+  principal:
+    image: mysql:8.4.13
+    container_name: mysql-principal
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cadastro
+    ports:
+      - "3307:3306"
+    command:
+      - --server-id=1
+      - --log-bin=mysql-bin
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=ON
+    volumes:
+      - principal_data:/var/lib/mysql
+
+  replica:
+    image: mysql:8.4.13
+    container_name: mysql-replica
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    command:
+      - --server-id=2
+      - --log-bin=mysql-bin
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=ON
+      - --read-only=ON
+    depends_on:
+      - principal
+    volumes:
+      - replica_data:/var/lib/mysql
+
+volumes:
+  principal_data:
+  replica_data:

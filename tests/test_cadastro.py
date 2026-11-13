@@ -30,3 +30,15 @@ def test_alterar_pessoa():
     atualizada = cadastro.buscarPorNome("Carlos Souza")
     assert atualizada is not None
     assert atualizada.getIdade() == 31
+
+
+def test_listar_pessoas():
+    """Testa a listagem de pessoas cadastradas."""
+    cadastro = CadastroPessoas()
+    cadastro.cadastrar("Lucas", 22, "lucas@email.com")
+    cadastro.cadastrar("Julia", 27, "julia@email.com")
+
+    lista = cadastro.listar()
+    assert len(lista) == 2
+    assert lista[0].getNome() == "Lucas"
+    assert lista[1].getNome() == "Julia"

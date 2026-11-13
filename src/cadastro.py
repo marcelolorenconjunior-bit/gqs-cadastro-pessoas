@@ -1,21 +1,21 @@
-"""Módulo contendo o gerenciamento do cadastro de pessoas."""
+﻿"""MÃ³dulo contendo o gerenciamento do cadastro de pessoas."""
 
-from src.pessoa import Pessoa
+from pessoa import Pessoa
 
 class CadastroPessoas:
-    """Classe que mantém e gerencia o conjunto de pessoas cadastradas."""
+    """Classe que mantÃ©m e gerencia o conjunto de pessoas cadastradas."""
 
     def __init__(self):
         self.__pessoas = []
 
     def cadastrar(self, nome, idade, email):
-        """Cria uma nova pessoa e a adiciona à lista interna."""
+        """Cria uma nova pessoa e a adiciona Ã  lista interna."""
         pessoa = Pessoa(nome, idade, email)
         self.__pessoas.append(pessoa)
         return pessoa
 
     def buscarPorNome(self, nome):
-        """Busca uma pessoa na lista através do nome completo."""
+        """Busca uma pessoa na lista atravÃ©s do nome completo."""
         for pessoa in self.__pessoas:
             if pessoa.getNome() == nome:
                 return pessoa
@@ -30,7 +30,7 @@ class CadastroPessoas:
         pessoa = self.buscarPorNome(nome)
         if pessoa is None:
             return None
-        
+
         pessoa.setNome(novo_nome)
         pessoa.setIdade(nova_idade)
         pessoa.setEmail(novo_email)

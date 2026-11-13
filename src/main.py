@@ -1,6 +1,6 @@
-"""Programa para cadastro de pessoas. Uso didático na disciplina de GQS."""
+﻿"""Programa para cadastro de pessoas. Uso didatico na disciplina de GQS."""
 
-from src.cadastro import CadastroPessoas
+from cadastro import CadastroPessoas
 
 def exibir_menu():
     """Exibe o menu principal."""
@@ -20,9 +20,9 @@ def cadastrar_pessoa(cadastro):
     nome = input("Informe o nome: ")
     idade = int(input("Informe a idade: "))
     email = input("Informe o email: ")
-    
+
     cadastro.cadastrar(nome, idade, email)
-    
+
     if idade >= 18:
         print("Situacao: Maior de idade")
     else:
@@ -42,7 +42,7 @@ def consultar_pessoa(cadastro):
     """Consulta uma pessoa pelo nome."""
     procurado = input("Nome para consultar: ")
     pessoa = cadastro.buscarPorNome(procurado)
-    
+
     if pessoa is None:
         print("Nome nao encontrado")
     else:
@@ -52,7 +52,7 @@ def alterar_pessoa(cadastro):
     """Altera os dados de uma pessoa."""
     procurado = input("Nome para alterar: ")
     pessoa = cadastro.buscarPorNome(procurado)
-    
+
     if pessoa is None:
         print("Nome nao encontrado")
     else:
@@ -65,15 +65,15 @@ def alterar_pessoa(cadastro):
 def listar_pessoas(cadastro):
     """Lista todas as pessoas cadastradas."""
     pessoas = cadastro.listar()
-    
+
     if len(pessoas) == 0:
         print("Nenhuma pessoa cadastrada")
         return
-        
+
     for pessoa in pessoas:
         exibir_pessoa(pessoa)
         print("-------------------------")
-        
+
     print(f"Total: {len(pessoas)}")
 
 def analisar_faixa_etaria(idade):
@@ -100,21 +100,21 @@ def analisar_pessoa(cadastro):
     """Analisa os dados de uma pessoa."""
     procurado = input("Nome para analisar: ")
     pessoa = cadastro.buscarPorNome(procurado)
-    
+
     if pessoa is None:
         print("Pessoa nao encontrada")
     else:
         analisar_faixa_etaria(pessoa.getIdade())
-        analisar_contato(pessoa.getIdade(), p=pessoa.getEmail())
+        analisar_contato(pessoa.getIdade(), email=pessoa.getEmail())
 
 def executar():
     """Executa o menu principal da aplicacao."""
     cadastro = CadastroPessoas()
     op = 0
-    
+
     while op != 6:
         op = exibir_menu()
-        
+
         if op == 1:
             cadastrar_pessoa(cadastro)
         elif op == 2:
@@ -129,7 +129,7 @@ def executar():
             print("Saindo...")
         else:
             print("Opcao invalida")
-            
+
     print("Fim do programa")
 
 if __name__ == "__main__":

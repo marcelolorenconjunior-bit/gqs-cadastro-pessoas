@@ -1,37 +1,40 @@
-﻿"""MÃ³dulo contendo o gerenciamento do cadastro de pessoas."""
-
+﻿"""Modulo de regras de negocio do Cadastro de Pessoas."""
+from typing import List, Optional
 from pessoa import Pessoa
+from repositorio_pessoas import RepositorioPessoas
+from repositorio_pessoas_memoria import RepositorioPessoasMemoria
+
 
 class CadastroPessoas:
-    """Classe que mantÃ©m e gerencia o conjunto de pessoas cadastradas."""
+    """Gerencia as operacoes de cadastro utilizando um repositorio."""
 
-    def __init__(self):
-        self.__pessoas = []
+    def __init__(self, repositorio: Optional[RepositorioPessoas] = None) -> None:
+        """Inicializa o cadastro com o repositorio informado ou em memoria."""
+        self.__repositorio = repositorio or RepositorioPessoasMemoria()
 
-    def cadastrar(self, nome, idade, email):
-        """Cria uma nova pessoa e a adiciona Ã  lista interna."""
+    def cadastrar(self, nome: str, idade: int, email: str) -> Pessoa:
+        """Cria e registra uma nova pessoa no repositorio."""
         pessoa = Pessoa(nome, idade, email)
-        self.__pessoas.append(pessoa)
+        self.__repositorio.cadastrar(pessoa)
         return pessoa
 
-    def buscarPorNome(self, nome):
-        """Busca uma pessoa na lista atravÃ©s do nome completo."""
-        for pessoa in self.__pessoas:
-            if pessoa.getNome() == nome:
-                return pessoa
-        return None
+    def buscarPorNome(self, nome: str) -> Optional[Pessoa]:
+        """Consulta uma pessoa pelo nome no repositorio."""
+        return self.__repositorio.buscar(nome)
 
-    def listar(self):
-        """Retorna a lista completa com todas as pessoas cadastradas."""
-        return self.__pessoas
+    def listar(self) -> List[Pessoa]:
+        """Retorna todas as pessoas cadastradas no repositorio."""
+        return self.__repositorio.listar()
 
-    def alterar(self, nome, novo_nome, nova_idade, novo_email):
-        """Altera os dados de uma pessoa localizada pelo nome."""
-        pessoa = self.buscarPorNome(nome)
-        if pessoa is None:
+    def alterar(
+        self, nome: str, novo_nome: str, nova_idade: int, novo_email: str
+    ) -> Optional[Pessoa]:
+        """Atualiza os dados de uma pessoa e persiste a alteracao no repositorio."""
+        atual = self.__repositorio.buscar(nome)
+        if atual is None:
             return None
-
-        pessoa.setNome(novo_nome)
-        pessoa.setIdade(nova_idade)
-        pessoa.setEmail(novo_email)
-        return pessoa
+        email_final = novo_email if novo_email != "" else atual.getEmail()
+        nova_pessoa = Pessoa(novo_nome, nova_idade, email_final)
+        if self.__repositorio.alterar(nome, nova_pessoa):
+            return self.__repositorio.buscar(novo_nome)
+        return None
